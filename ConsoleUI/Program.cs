@@ -1,62 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using Business.Concrete;
-using DataAccess.Concrete.InMemory;
+﻿using Business.Concrete;
+using DataAccess.Concrete;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using System;
 
 namespace ConsoleUI
 {
     class Program
     {
         static void Main(string[] args)
-        {
-            CarManager carManager = new CarManager(new InMemoryCarDal());
-            // Ekrana Yazdır
-            Console.WriteLine("***GETALL***M");
-            consoleWrite(carManager.GetAll());
+        {           
+            CrudOperationsOfCar();
 
-            Car car1 = new Car();
-            car1.Id = 28;
-            car1.BrandId = 3;
-            car1.ColorId = 2;
-            car1.DailyPrice = 570;
-            car1.Description = "RENAULT";
-
-            carManager.Add(car1);
-            Console.WriteLine("***EKLEME/ADD***");
-            consoleWrite(carManager.GetAll());
-
-            Car updateCar = new Car();
-            updateCar.Id = 2;
-            updateCar.BrandId = 99;
-            updateCar.ColorId = 100;
-            updateCar.DailyPrice = 1000;
-            updateCar.Description = "VOLVO";
-
-            Console.WriteLine("*****GÜNCELLEME/uPdATE******");
-            carManager.Update(updateCar);
-            consoleWrite(carManager.GetAll());
-
-            Car deleteCar = new Car();
-            deleteCar.Id = 3;
-
-            Console.WriteLine("****SİLME/DELETE****");
-            carManager.Delete(deleteCar);
-            consoleWrite(carManager.GetAll());
-
-            Console.WriteLine("****GetById fonksiyonu ****");
-            Console.WriteLine(carManager.GetById(2).Description);
-
+            Console.ReadLine();
         }
 
-        static void consoleWrite(List<Car> cars)
+        private static void CrudOperationsOfCar()
         {
-            foreach (var car in cars)
+            CarManager carManager = new CarManager(new EfCarDal());
+
+            foreach (var detail in carManager.GetCarDetail())
             {
-                Console.WriteLine(car.Description);
+                Console.WriteLine(detail.Description + "/" + detail.BrandName + "/" + detail.ColorName + "/" + detail.DailyPrice);
             }
-            Console.WriteLine("---------------------------------");
-            
+
+
         }
+
+        private static void CrudOperationsOfColor()
+        {
+            ColorManager colorManager = new ColorManager(new EfColorDal());
+            Console.WriteLine("COLOR Id si 2 olan gösterilitor..");
+            Console.WriteLine(colorManager.GetById(2).ColorName);
+
+
+            colorManager.Add(new Color { ColorId = 6, ColorName = "yellow" });
+            colorManager.Update(new Color { ColorId = 6, ColorName = "NewYellow" });
+            colorManager.Delete(5);
+
+            foreach (var color in colorManager.GetAll())
+            {
+                Console.WriteLine(color.ColorName);
+            }
+        }
+        private static void CrudOperationsOfBrand()
+        {
+            BrandManager brandManager = new BrandManager(new EfBrandDal());
+            Console.WriteLine(brandManager.GetById(2).BrandName);
+            brandManager.Add(new Brand { BrandId = 5, BrandName = "Ferrari" });
+            brandManager.Update(new Brand { BrandId = 6, BrandName = "NewBrandd" });
+            brandManager.Delete(5);
+
+            foreach (var brand in brandManager.GetAll())
+            {
+                Console.WriteLine(brand.BrandName);
+            }
+        }
+
+
     }
 }
