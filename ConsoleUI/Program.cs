@@ -24,7 +24,6 @@ namespace ConsoleUI
                 Console.WriteLine(detail.Description + "/" + detail.BrandName + "/" + detail.ColorName + "/" + detail.DailyPrice);
             }
 
-
         }
 
         private static void CrudOperationsOfColor()
@@ -56,7 +55,5 @@ namespace ConsoleUI
                 Console.WriteLine(brand.BrandName);
             }
         }
-
-
     }
 }
